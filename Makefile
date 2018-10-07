@@ -24,8 +24,8 @@ UPX = true
 CXXOUTPUT = -o
 
 ifdef MAC
-CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -arch i386
-LD = g++ -arch i386
+CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer
+LD = g++
 
 else # linux
 CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store
