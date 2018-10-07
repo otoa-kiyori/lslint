@@ -2,68 +2,35 @@ PROGRAM = lslint
 VERSION_NUMBER = 1.1.1
 BUILD_DATE = $(shell date +"%Y-%m-%d")
 
-# See if we're running on windows
-UNAME = $(shell uname -a | grep CYGWIN)
-ifneq "$(UNAME)" ""
-WINDOWS = 1
-endif
+# See if we're running on mac
 UNAME = $(shell uname -a | grep Darwin)
 ifneq "$(UNAME)" ""
 MAC = 1
 endif
-UNAME = $(shell uname -p | grep powerpc)
-ifneq "$(UNAME)" ""
-PPC = 1
-endif
 
-# Don't run flex or bison on windows.
-ifndef WINDOWS
 LEX = flex
 YACC = bison
-else
-LEX = echo
-YACC = echo
-endif
 
-
-ifndef WINDOWS
 DEBUG ?= -DDEBUG_LEVEL=LOG_DEBUG_MINOR -ggdb
-else
-DEBUG ?= -DDEBUG_LEVEL=LOG_DEBUG_MINOR -Zi
+
 LINKDEBUG = 
 ifneq "$(DEBUG)" ""
 LINKDEBUG = -DEBUG
 endif
-endif
 
-ifndef WINDOWS
 OPTIMIZE ?= 
-CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store
-CXXOUTPUT = -o
-ifndef MAC
-LD = g++ -g -static
-else
-ifndef PPC
-CXX += -arch i386
-LD = g++ -arch i386
-else
-CXX += -arch i386 -arch ppc
-LD = g++ -arch i386 -arch ppc
-endif
-endif
 LDOUTPUT = -o 
 UPX = true
-else
-CXX = cl -W3 -TP -D "NDEBUG" -D "_CONSOLE" -D "_MBCS" -D "YY_NO_UNISTD_H" -FD -EHsc -nologo
-CXXOUTPUT = -Fo
-LD = link $(LINKDEBUG) -INCREMENTAL:NO -NOLOGO -SUBSYSTEM:CONSOLE -OPT:REF -OPT:ICF -MACHINE:X86  # kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
-LDOUTPUT = -OUT:
-PROGRAM = lslint.exe
-ifneq "$(DEBUG)" ""
-UPX = echo
-else
-UPX = "X:\Program Files\upx\upx" --force --best --crp-ms=999999
-endif
+CXXOUTPUT = -o
+
+ifdef MAC
+CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -arch i386
+LD = g++ -arch i386
+
+else # linux
+CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store
+LD = g++ -g -static
+
 endif
 
 CXX += $(DEBUG) $(OPTIMIZE) -DVERSION='"$(VERSION)"' -DBUILD_DATE='"$(BUILD_DATE)"'
@@ -86,12 +53,8 @@ $(PROGRAM): $(OBJS)
 clean:
 	rm -f $(OBJS) lex.yy.c lslint lslmini.tab.c lslmini.tab.h
 
-ifndef WINDOWS
-
 check: all
 	sh test.sh
-
-endif
 
 $(OBJS): lslmini.hh
 
