@@ -25,7 +25,7 @@ CXXOUTPUT = -o
 
 ifdef MAC
 CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer
-LD = g++
+LD = g++ -g
 
 else # linux
 CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store
