@@ -123,8 +123,11 @@ default{timer(){
 (string) - FALSE;  // $[E10019]
 (string)~1;        // $[E10019]
 (string)-<0,0,0>;  // $[E10019]
+(string)-ZERO_VECTOR;    // $[E10019]
+(string)-ZERO_ROTATION;  // $[E10019]
 (string)-good_i01; // $[E10019]
 (string)[-"nope"]; // $[E10002] invalid operator
+(string)-EOF;      // $[E10002]
 
 if (good_i00 == 0)               0; // $[E20011] always true
 if (good_i00 == good_i00)        0; // $[E20011]

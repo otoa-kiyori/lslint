@@ -940,7 +940,7 @@ typecast
 	| '(' typename ')' '-' IDENTIFIER
 	{
 		LLScriptSymbol *symbol = script->get_symbol_table()->lookup($5);
-		if (!symbol || symbol->get_symbol_type() != SYM_VARIABLE || symbol->get_sub_type() != SYM_BUILTIN)
+		if (!symbol || symbol->get_symbol_type() != SYM_VARIABLE || symbol->get_sub_type() != SYM_BUILTIN || symbol->get_type()->get_itype() == LST_VECTOR || symbol->get_type()->get_itype() == LST_QUATERNION)
 			ERROR(&@4, E_SYNTAX_ERROR, "Need parentheses around expression.");
 		$$ = new LLScriptTypecastExpression($2, new LLScriptExpression( new LLScriptLValueExpression( new LLScriptIdentifier($5) ), '-') );
 	}
