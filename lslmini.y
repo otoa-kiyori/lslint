@@ -95,6 +95,8 @@
 
 %token					INC_OP
 %token					DEC_OP
+%token					POSTINC_OP
+%token					POSTDEC_OP
 %token					ADD_ASSIGN
 %token					SUB_ASSIGN
 %token					MUL_ASSIGN
@@ -993,11 +995,11 @@ unarypostfixexpression
 	}
 	| lvalue INC_OP
 	{
-		$$ = new LLScriptExpression(  $1 , INC_OP );
+		$$ = new LLScriptExpression(  $1 , POSTINC_OP );
 	}
 	| lvalue DEC_OP
 	{
-		$$ = new LLScriptExpression(  $1 , DEC_OP );
+		$$ = new LLScriptExpression(  $1 , POSTDEC_OP );
 	}
 	| IDENTIFIER '(' funcexpressionlist ')'
 	{

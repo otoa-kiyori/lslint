@@ -9,6 +9,8 @@ LLScriptConstant *LLScriptIntegerConstant::operation(int operation, LLScriptCons
       switch (operation) {
          case INC_OP:  nv = value + 1; break;
          case DEC_OP:  nv = value - 1; break;
+         case POSTINC_OP: case POSTDEC_OP:
+                       nv = value;     break;
          case '!':     nv = !value;    break;
          case '~':     nv = ~value;    break;
          case '-':     nv = -value;    break;
@@ -73,6 +75,8 @@ LLScriptConstant *LLScriptFloatConstant::operation(int operation, LLScriptConsta
       switch (operation) {
          case INC_OP:  nv = value + 1; break;
          case DEC_OP:  nv = value - 1; break;
+         case POSTINC_OP: case POSTDEC_OP:
+                       nv = value;     break;
          case '-':     nv = -value;    break;
          default:      return NULL;
       }
