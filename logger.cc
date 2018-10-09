@@ -248,7 +248,7 @@ LogMessage::~LogMessage() {
 const char *Logger::error_messages[] = {
    "ERROR",                                                           // 10000
    "Duplicate declaration of `%s'; previously declared at (%d, %d).", // 10001
-   "Invalid operator: %s %s %s.",                                     // 10002
+   "Invalid operator: %s%s%s%s%s.",                                   // 10002
    "`%s' is deprecated.",                                             // 10003
    "`%s' is deprecated, use %s instead.",                             // 10004
    "Attempting to use `%s' as a %s, but it is a%s %s.",               // 10005

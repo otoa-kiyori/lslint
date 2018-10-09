@@ -359,7 +359,9 @@ static const char* operation_str(int operation) {
    static char buf[16+1];
    switch (operation) {
       case EQ:            return "==";
+      case POSTINC_OP:
       case INC_OP:        return "++";
+      case POSTDEC_OP:
       case DEC_OP:        return "--";
       case BOOLEAN_AND:   return "&&";
       case BOOLEAN_OR:    return "||";
@@ -381,7 +383,16 @@ void LLScriptExpression::determine_type() {
    else {
       type = get_child(0)->get_type()->get_result_type( operation, get_child(1) ? get_child(1)->get_type() : NULL );
       if ( type == NULL ) {
-         ERROR( HERE, E_INVALID_OPERATOR, get_child(0)->get_type()->get_node_name(), operation_str(operation), get_child(1) ? get_child(1)->get_type()->get_node_name() : "" );
+         if (get_child(1)) {
+            // Binary operator
+            ERROR( HERE, E_INVALID_OPERATOR, get_child(0)->get_type()->get_node_name(), " ", operation_str(operation), " ", get_child(1)->get_type()->get_node_name() );
+         } else if (operation == POSTINC_OP || operation == POSTDEC_OP) {
+            // Unary postfix operator
+            ERROR( HERE, E_INVALID_OPERATOR, get_child(0)->get_type()->get_node_name(), " ", operation_str(operation), "", "" );
+         } else {
+            // Unary prefix operator
+            ERROR( HERE, E_INVALID_OPERATOR, operation_str(operation), " ", get_child(0)->get_type()->get_node_name(), "", "" );
+         }
          // Assign a reasonable type based on operation
          LST_TYPE t = operation == EQ ? LST_INTEGER :
             operation == NEQ ? LST_INTEGER :
@@ -401,7 +412,7 @@ void LLScriptExpression::determine_type() {
             LST_NULL;
          type = t == LST_NULL ? get_child(0)->get_type() : new LLScriptType(t);
       } else {
-         if ( operation == '=' || operation == INC_OP || operation == DEC_OP ) {
+         if ( operation == '=' || operation == INC_OP || operation == DEC_OP || operation == POSTINC_OP || operation == POSTDEC_OP ) {
             // unused variable // LLASTNode *last_node     = this;
             // unused variable // LLASTNode *node          = get_parent();
 
