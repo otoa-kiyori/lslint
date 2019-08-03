@@ -359,6 +359,7 @@ static const char* operation_str(int operation) {
    static char buf[16+1];
    switch (operation) {
       case EQ:            return "==";
+      case NEQ:           return "!=";
       case POSTINC_OP:
       case INC_OP:        return "++";
       case POSTDEC_OP:
