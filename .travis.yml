@@ -3,7 +3,32 @@ os:
   - osx
 
 language: cpp
-compiler: clang
-script: make && sh test.sh
+
 git:
   depth: 1
+
+script: 
+  - if [ "$TRAVIS_JOB_NAME" = "32" ] ; then sudo apt-get install gcc-multilib g++-multilib ; fi
+  - export DEBUG=""
+  - export BUILD_VERSION_NUMBER="$TRAVIS_TAG"
+  - make
+  - if [ "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_JOB_NAME" != "32" ] ; then ./test.sh ; fi
+
+jobs:
+  include:
+    if: os = linux
+    name: "32"
+    env: BUILD_ADDITIONAL_ARG=-m32
+
+before_deploy:
+  - zip lslint_${TRAVIS_TAG}_${TRAVIS_OS_NAME}${TRAVIS_JOB_NAME}.zip lslint
+
+deploy:
+  provider: releases
+  api_key:
+      secure: "F3Nf4ZfZ4v2T6Aa79QsCZrQx4l8JIVKSOqcqEwtq9ff9pu64Ubar/wQGCpwOFgQ+Tc4tfGZstxbTmb2yws1hZCDY35MnlrF2l6BuTTK3fTKnZ1QNb/WaVb+EcLHtkItsmPUfL/uHWQKvswHDjotQeJgSsfF9ZnpmShl3HFS2PYM="
+  file: "lslint_${TRAVIS_TAG}_${TRAVIS_OS_NAME}${TRAVIS_JOB_NAME}.zip"
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true

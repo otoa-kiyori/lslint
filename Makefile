@@ -28,8 +28,8 @@ CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer
 LD = g++ -g
 
 else # linux
-CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store
-LD = g++ -g -static
+CXX = g++ -g -Wall -std=c++98 -pedantic-errors -fno-omit-frame-pointer -ffloat-store $(BUILD_ADDITIONAL_ARG)
+LD = g++ -g -static $(BUILD_ADDITIONAL_ARG)
 
 endif
 
