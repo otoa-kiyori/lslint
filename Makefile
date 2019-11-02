@@ -1,5 +1,5 @@
 PROGRAM = lslint
-VERSION_NUMBER = 1.2.2
+VERSION_NUMBER = $(BUILD_VERSION_NUMBER)
 BUILD_DATE = $(shell date +"%Y-%m-%d")
 
 # See if we're running on mac

@@ -987,7 +987,7 @@ void usage(const char *name) {
 
 void version() {
    /*
-      fprintf(stderr, "lslint v" VERSION " by masa, built " BUILD_DATE "\n");
+      fprintf(stderr, "lslint " VERSION " by masa, built " BUILD_DATE "\n");
       fprintf(stderr, "by using this program you agree to smile :o)\n");
       */
 
@@ -995,7 +995,7 @@ void version() {
    fprintf(stderr, "    ,dNWX0xolodddd:.','''..:OXWWX::\n");
    fprintf(stderr, "   ::WMMMMMMMMMMMN;.,'.....':xkxx:,       =] W-Hat KReW PreZentZ [=\n");
    fprintf(stderr, "   :,0WMMMMMMMMMMN;','...',,'...'..\n");
-   fprintf(stderr, "    .cNMMMMMMMMMMMK:,,;;.',,'...,,',            lslint v%s\n", VERSION);
+   fprintf(stderr, "    .cNMMMMMMMMMMMK:,,;;.',,'...,,',            lslint %s\n", VERSION);
    fprintf(stderr, "   ,dWMMMMMMMMMMMMMMWWWMKdl,...''..\n");
    fprintf(stderr, "  ,lWMMMMMMMMMMMMMMMMMMMMMMNo,'':o                 CODiNG::\n");
    fprintf(stderr, "  .OMMMMMMMMMMMMMMMMMMMMMMMMMNXNMMx.                              ~masa~\n");
@@ -1025,7 +1025,7 @@ void version() {
 }
 
 void short_version() {
-   fprintf(stderr, "lslint v%s\n", VERSION);
+   fprintf(stderr, "lslint %s\n", VERSION);
 }
 
 int yylex_init( void ** );
