@@ -637,10 +637,11 @@ void LLScriptTypecastExpression::determine_value() {
                {
                   double d;
                   float f = 0.0f;
-                  sscanf( ((LLScriptStringConstant *)value)->get_value(), "%lf", &d );
-                  f = (float)d;
-                  if (mono_mode && (d > -1.1754943157898259e-38 && d < 1.1754943157898259e-38))
-                     f = 0.0f;
+                  if ( sscanf( ((LLScriptStringConstant *)value)->get_value(), "%lf", &d ) == 1 ) {
+                     if ( !mono_mode || (d <= -1.1754943157898259e-38 || d >= 1.1754943157898259e-38) ) {
+                        f = (float)d;
+                     }
+                  }
                   constant_value = new LLScriptFloatConstant(f);
                }
                break;
