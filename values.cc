@@ -485,6 +485,34 @@ static void get_vq_as_string(LLScriptConstant *value, char *buf, int dp)
    *s = 0;
 }
 
+
+// The GLibC library used by LSL considers "inf" and "infinity" as valid
+// floats in sscanf, but not "i", "in", "infi", "infin", "infini", "infinit".
+// This function checks if the string is a valid infinity with that criterion,
+// allowing us to avoid usage of sscanf, to ensure it works with C libraries
+// other than GLibC (issue #96).
+#define LENGTH_OF_INF 3
+#define LENGTH_OF_INFINITY 8
+static int is_valid_infinity(const char *s) {
+   // This could be shortened with isspace() but we don't trust the locale
+   while ( *s == ' ' || *s == '\f' || *s == '\n' || *s == '\r' || *s == '\t' || *s == '\v' ) {
+      s++;
+   }
+   if  ( *s == '+' || *s == '-' ) {
+      s++;
+   }
+   const char *base = s;
+   const char *infinity = "infinity";
+   // Find the common prefix, case insensitive
+   // It would be cleaner to use toupper() but again, we don't trust the locale
+   while ( (*s | ('a' - 'A')) == *infinity && *s ) {
+      s++;
+      infinity++;
+   }
+   return s == base || s - base == LENGTH_OF_INF || s - base == LENGTH_OF_INFINITY;
+}
+
+
 void LLScriptTypecastExpression::determine_value() {
    LLASTNode                 *node       = get_children();
    LLScriptConstant          *value;
@@ -672,25 +700,40 @@ void LLScriptTypecastExpression::determine_value() {
       case LST_QUATERNION:
          if ( value->get_type()->get_itype() == LST_STRING ) {
             const char *s = ((LLScriptStringConstant*)value)->get_value();
+            int ncomponents;
+            int comp = 0;
+            float f[4];
             if ( type->get_itype() == LST_VECTOR ) {
-               float f[3];
-               LLScriptVectorConstant *result = new LLScriptVectorConstant(0.f,0.f,0.f);
-               if ( sscanf(s, "<%f,%f,%f>", &f[0], &f[1], &f[2]) == 3 ) {
-                  result->get_value()->x = f[0];
-                  result->get_value()->y = f[1];
-                  result->get_value()->z = f[2];
-               }
-               constant_value = result;
+               ncomponents = 3;
+               constant_value = new LLScriptVectorConstant(0.f,0.f,0.f);
             } else {
-               float f[4];
-               LLScriptQuaternionConstant *result = new LLScriptQuaternionConstant(0.f,0.f,0.f,1.f);
-               if ( sscanf(s, "<%f,%f,%f,%f>", &f[0], &f[1], &f[2], &f[3]) == 4 ) {
-                  result->get_value()->x = f[0];
-                  result->get_value()->y = f[1];
-                  result->get_value()->z = f[2];
-                  result->get_value()->s = f[3];
+               ncomponents = 4;
+               constant_value = new LLScriptQuaternionConstant(0.f,0.f,0.f,1.f);
+            }
+            if ( s[0] == '<' ) {
+               while ( *++s ) {
+                  char *news;
+                  f[comp] = strtof(s, &news);
+                  if ( s == news || !is_valid_infinity(s) || ++comp == ncomponents || *news != ',' ) {
+                     // error in conversion, not a valid infinity, done, missing separating comma
+                     break;
+                  }
+                  s = news;
                }
-               constant_value = result;
+            }
+            if ( comp == ncomponents ) {
+               if ( ncomponents == 3 ) {
+                  LLVector *value = reinterpret_cast<LLScriptVectorConstant *>(constant_value)->get_value();
+                  value->x = f[0];
+                  value->y = f[1];
+                  value->z = f[2];
+               } else {
+                  LLQuaternion *value = reinterpret_cast<LLScriptQuaternionConstant *>(constant_value)->get_value();
+                  value->x = f[0];
+                  value->y = f[1];
+                  value->z = f[2];
+                  value->s = f[3];
+               }
             }
          }
          break;
