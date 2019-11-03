@@ -83,6 +83,21 @@ if (( // $[E20012]
 if (( // $[E20012]
      (integer)" \n-12345 " != -12345
 )) failed += 23;
+if (( // $[E20012]
+     (integer)"0xFFFFFFFE" != -2
+)) failed += 1001; // we can't insert test numbers, start on 1001
+if (( // $[E20012]
+     (integer)"0x80000000" != -0x7FFFFFFF-1
+)) failed += 1002;
+if (( // $[E20012]
+     (integer)"-0xFF" != 0
+)) failed += 1003;
+if (( // $[E20012]
+     (integer)"+0xFF" != 0
+)) failed += 1004;
+if (( // $[E20012]
+     (integer)" 0xFF" != 0
+)) failed += 1005;
 
 // Test string to float conversion rules
 if (( // $[E20012]

@@ -659,13 +659,17 @@ void LLScriptTypecastExpression::determine_value() {
                {
                   const char *s = ((LLScriptStringConstant*)value)->get_value();
                   int32_t result = 0;
-                  int iresult;
-                  unsigned uresult;
+                  unsigned long ulresult;
                   if ( s[0] == '0' && (s[1] == 'X' || s[1] == 'x') ) {
-                     if (strspn(s + 2, "0123456789ABCDEFabcdef") > 8)
+                     if ( strspn(s + 2, "0123456789ABCDEFabcdef") > 8 ) {
                         result = -1;
-                     else if (sscanf(s, "%x", &uresult) == 1)
-                        result = (int32_t)uresult;
+                     } else if ( sscanf(s, "%lx", &ulresult) == 1 ) {
+                        if ( ulresult > 0x7FFFFFFFUL ) {
+                           result = -(long)(0xFFFFFFFFUL - ulresult) - 1L;
+                        } else {
+                           result = ulresult & 0x7FFFFFFFUL;
+                        }
+                     }
                   } else {
                      // In 64 bits, we need to detect overflow ourselves
                      int len = strlen(s);
@@ -677,13 +681,28 @@ void LLScriptTypecastExpression::determine_value() {
                         sscanf(s, " %[0-9]", buf);
                      int buflen = strlen(buf);
                      int sgnlen = strlen(sgn);
-                     if (sgnlen <= 1 && buflen > 10) {
-                        result = -1;
-                     } else if (sgnlen <= 1 && buflen >= 1) {
-                        if (buflen == 10 && strcmp(buf, "4294967296") >= 0) {
+                     if ( sgnlen <= 1 ) { // with more than one sign, the result is the default zero
+                        if ( buflen > 10 ) { // too many digits
                            result = -1;
-                        } else if (sscanf(s, "%d", &iresult) == 1) {
-                           result = (int32_t)iresult;
+                        } else if ( buflen >= 1 ) { // with zero digits, the result is the default zero
+                           if ( buflen == 10 && strcmp(buf, "4294967296") >= 0 ) {
+                              // magnitude of result does not fit in a 32-bit unsigned value
+                              result = -1;
+                           } else if ( sscanf(buf, "%lu", &ulresult ) == 1) {
+                              // Handle result relying only on the platform using two's complement,
+                              // standard type sizes, and standard rules for implicit type conversion
+                              // (fixes problems in some platforms)
+                              if ( ulresult > 0x7FFFFFFFUL ) {
+                                 result = -(long)(0xFFFFFFFFUL - ulresult) - 1L;
+                              } else {
+                                 result = ulresult & 0x7FFFFFFFUL;
+                              }
+                              // In LSL, -(-2147483648) gives -2147483648, therefore
+                              // we don't apply the minus sign in that case
+                              if ( sgn[0] == '-' && result != -0x7FFFFFFFL-1L ) {
+                                 result = -result;
+                              }
+                           }
                         }
                      }
                      delete buf;
