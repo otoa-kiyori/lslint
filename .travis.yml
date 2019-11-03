@@ -12,7 +12,7 @@ script:
   - export DEBUG=""
   - export BUILD_VERSION_NUMBER="$TRAVIS_TAG"
   - make
-  - if [ "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_JOB_NAME" != "32" ] ; then ./test.sh ; fi
+  - ./test.sh
 
 jobs:
   include:
