@@ -31,9 +31,9 @@
 
 %}
 
-%define parse.error verbose
+%error-verbose
 %locations
-%define api.pure
+%pure-parser
 %parse-param { void *scanner }
 %lex-param { void *scanner }
 
