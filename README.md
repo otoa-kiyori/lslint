@@ -26,7 +26,7 @@ wrong, and is not recommended as a base for anything but a lint tool.
 #### Additional changes
 ##### Makopoppo
 * added nmake support (see NMAkefile for details).
-* dropped builtins.txt creator. if you look for new builtins.txt, see [kwdb project](https://bitbucket.org/Sei_Lisa/kwdb)
+* dropped builtins.txt creator. if you look for new builtins.txt, see [kwdb project](https://github.com/Sei-Lisa/kwdb)
 * enabled appending the input file path to the result lines by "-p".
 
 ##### Xenhat
