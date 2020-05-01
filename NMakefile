@@ -15,12 +15,14 @@ BUILD_DATE = %DATE:~-10,4%-%DATE:~-5,2%-%DATE:~-2,2%
 #
 # 5. Run "nmake clean /F NMakefile" to cleanup.
 # 
-# NOTE: builtins.txt should be converted beforehand if needed.
-#       See line 90 in Makefile on how to do that.
+# NOTE: builtins.txt should be converted beforehand. Run the following on any terminal emulator (f.g. MinGW)
 # 
-# NOTE: You may need to change the system locale to "English(US)"
-#       for successful compilation. Use `chcp` command to make sure that
-#       the active code page is 437.
+# echo "#ifdef _MSC_VER" > builtins_txt.cc
+# echo "#pragma execution_character_set(\"utf-8\")" >> builtins_txt.cc
+# echo "#endif" >> builtins_txt.cc
+# echo "const char *builtins_txt[] = {" >> builtins_txt.cc
+# sed -e '/^\/\//d; s/"/\\\"/g; s/^/"/; s/$/",/' builtins.txt >> builtins_txt.cc || { rm -f builtins_txt.cc ; false ; }
+# echo "(char*)0 };" >> builtins_txt.cc
 
 !IFNDEF DEBUG
 NODEBUG=1
