@@ -13,7 +13,7 @@ script:
   - if [ "$TRAVIS_JOB_NAME" = "32" ] ; then sudo apt-get install gcc-multilib g++-multilib ; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew install bison && export PATH="/usr/local/opt/bison/bin:$PATH" && bison --version ; fi
   - export DEBUG=""
-  - export BUILD_VERSION_NUMBER=${$(test -f .version && cat .version):-$TRAVIS_TAG}
+  - export BUILD_VERSION_NUMBER="${$(test -f .version && cat .version):-$TRAVIS_TAG}"
   - make
   - ./test.sh
 
