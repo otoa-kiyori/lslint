@@ -13,7 +13,7 @@ script:
   - if [ "$TRAVIS_JOB_NAME" = "32" ] ; then sudo apt-get install gcc-multilib g++-multilib ; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew install bison && export PATH="/usr/local/opt/bison/bin:$PATH" && bison --version ; fi
   - export DEBUG=""
-  - export BUILD_VERSION_NUMBER="$TRAVIS_TAG"
+  - export BUILD_VERSION_NUMBER=${$(test -f .version && cat .version):-$TRAVIS_TAG}
   - make
   - ./test.sh
 
@@ -29,7 +29,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-      secure: "F3Nf4ZfZ4v2T6Aa79QsCZrQx4l8JIVKSOqcqEwtq9ff9pu64Ubar/wQGCpwOFgQ+Tc4tfGZstxbTmb2yws1hZCDY35MnlrF2l6BuTTK3fTKnZ1QNb/WaVb+EcLHtkItsmPUfL/uHWQKvswHDjotQeJgSsfF9ZnpmShl3HFS2PYM="
+      secure: "jQKKVzbzjVGxJMIZLciXG5r9TtCL9QBOzqPXeGWuNyknLB2kcrhv9PM6qejUiDGOuHHc6NR28N04gvFkAu5gIPIbnpfIIB4LdfgM/BGA52Ichi9hCgrdKiUFZzstRgX62Tfo9MujNz8UPmHnTSG3wFMR/yzO63u+EjIlgh4qQRoqDN7RNoQVgBosuBwjz4Mlt1ACVznyv0emkgfvHnlryL/02hJSqi7OQisn/0z/jY39oof5QaWoKTgT5VeHuVbuEqH1O4UYQBbb6zFJhPBHixkf0j3t/qKqbbCo/Y5o89OcW7WhFChSj8dGjRas+fGHFZH4vHN9bFzqTNkkJOjNmLWFocrDG0azzd5jxnGmrSP3G2EY2G+9nA8ID0awIRT8DVNPuPmtjF1DM10EGNDedsWTa3PDIsJ9so49qq/xO5pJjYpyXhAOE57WMnq55ku/pvhARM7lg4NuE8ivOkYpfZfb6a5s4ym6EGbbEX6dfMT2SFR4nNvSAycBSWbEjC3QrHl3SwlHjzz6tv/Jin9mhIA2ntEiePqCSLMsI/YXfe28K2LuhzDGIpGFtR1eJZytdEZJ6d80h7JOC2CWEglFzCXaPRjtNHH0q1Z28sIVhW9toqKCceYwV+CYPNknRmYfrHTR33zI/qdRMAGuHSlBGiYIECIK+DhPNpO5xnm8XeI="
   file: "lslint_${TRAVIS_TAG}_${TRAVIS_OS_NAME}${TRAVIS_JOB_NAME}.zip"
   skip_cleanup: true
   overwrite: true

@@ -1,6 +1,10 @@
 `lslint` is a tool to check the syntactic and semantic validity of Second Life LSL scripts.
 
-[![Build Status](https://travis-ci.org/Makopo/lslint.svg?branch=master)](https://travis-ci.org/Makopo/lslint)
+[![Build Status](https://travis-ci.com/FixedBit/lslint.svg?branch=master)](https://travis-ci.org/FixedBit/lslint)
+
+For now I have taken over keeping this updated as much as possible as there have been no updates on the official repo in years.
+
+~ FixedBit / Coal Edge
 
 #### Releases
 
@@ -41,6 +45,9 @@ wrong, and is not recommended as a base for anything but a lint tool.
 * added god mode support
 * added reporting of several errors and warnings
 * numerous bug fixes and enhancements
+
+##### FixedBit
+* updated and and cleaned up compile for all languages
 
 #### Special Thanks
 * Strife Onizuka

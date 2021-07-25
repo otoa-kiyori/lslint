@@ -1,5 +1,5 @@
 PROGRAM = lslint
-VERSION_NUMBER = $(BUILD_VERSION_NUMBER)
+VERSION_NUMBER = $(shell cat .version)
 BUILD_DATE = $(shell date +"%Y-%m-%d")
 
 # See if we're running on mac
@@ -59,10 +59,7 @@ check: all
 $(OBJS): lslmini.hh
 
 builtins_txt.cc: builtins.txt
-	echo "#ifdef _MSC_VER" > builtins_txt.cc
-	echo "#pragma execution_character_set(\"utf-8\")" >> builtins_txt.cc
-	echo "#endif" >> builtins_txt.cc
-	echo "const char *builtins_txt[] = {" >> builtins_txt.cc
+	echo "const char *builtins_txt[] = {" > builtins_txt.cc
 	sed -e '/^\/\//d; s/"/\\\"/g; s/^/"/; s/$$/",/' \
 		builtins.txt >> builtins_txt.cc || \
 			{ rm -f builtins_txt.cc ; false ; }
