@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-  echo "Usage: archive_lslint.sh RELEASE_NAME(e.g. v1.0.4)" 1>&2
+if [ $1 = "--help" ]; then
+  echo "Usage: archive_lslint.sh [optional RELEASE_NAME(e.g. v1.0.4)]" 1>&2
   exit 1
 fi
 
-LSLINT_ZIP_VERSION=$1
+LSLINT_ZIP_VERSION=${1:-$(cat .version)}
 mkdir -p binary/zips
 
 pushd binary/windows/; zip ../zips/lslint_${LSLINT_ZIP_VERSION}_win.zip lslint.exe; popd

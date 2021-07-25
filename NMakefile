@@ -1,4 +1,5 @@
-VERSION_NUMBER = v1.2.7
+VERSION_NUMBER= \
+!INCLUDE .version
 BUILD_DATE = %DATE:~-10,4%-%DATE:~-5,2%-%DATE:~-2,2%
 
 #
