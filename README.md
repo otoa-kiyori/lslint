@@ -8,8 +8,8 @@ For now I have taken over keeping this updated as much as possible as there have
 
 #### Releases
 
-See [Releases](https://github.com/Makopo/lslint/releases) for binaries.
-Latest release resides [here](https://github.com/Makopo/lslint/releases/latest).
+See [Releases](https://github.com/FixedBit/lslint/releases) for binaries.
+Latest release resides [here](https://github.com/FixedBit/lslint/releases/latest).
 
 #### Compiling
 * `make` should be all that's required on POSIX systems, and a solution file exists for VS2015 on Windows.
