@@ -393,6 +393,7 @@ const char *builtins_txt[] = {
 "void llSensorRemove()",
 "void llSensorRepeat(string Name, key ID, integer Type, float Range, float Arc, float Rate)",
 "integer llSetAgentEnvironment(key agent_id, float transition, list Settings)",
+"void llSetAgentRot(rotation rot, integer flags)",
 "void llSetAlpha(float Opacity, integer Face)",
 "void llSetAngularVelocity(vector AngVel, integer Local)",
 "void llSetAnimationOverride(string AnimationState, string AnimationName)",
